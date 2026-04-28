@@ -1,10 +1,10 @@
 export const environment = {
-  production: false,
-  authUrl:        'http://localhost:7002/api/v1',
-  vehicleUrl:     'http://localhost:7004/api/v1',
-  parkingLotUrl:  'http://localhost:5003/api/v1',
-  spotUrl:        'http://localhost:5002/api/v1',
-  bookingUrl:     'http://localhost:5001/api/v1',
-  paymentUrl:     'http://localhost:5006/api/v1',
-  notificationUrl:'http://localhost:5008/api/v1',
+  production: true,
+  authUrl:        'https://parkease-auth.onrender.com/api/v1',
+  vehicleUrl:     'https://parkease-vehicle.onrender.com/api/v1',
+  parkingLotUrl:  'https://parkease-parkinglot.onrender.com/api/v1',
+  spotUrl:        'https://parkease-spot.onrender.com/api/v1',
+  bookingUrl:     'https://parkease-booking.onrender.com/api/v1',
+  paymentUrl:     'https://parkease-payment.onrender.com/api/v1',
+  notificationUrl:'https://parkease-notification.onrender.com/api/v1',
 };
