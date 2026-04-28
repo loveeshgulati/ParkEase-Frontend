@@ -3,7 +3,7 @@ services:
     name: parkease-frontend
     runtime: docker
     dockerContext: .
-    dockerfilePath: Dockerfile
+    dockerfile: Dockerfile
     envVars:
       - key: NODE_VERSION
         value: 20
