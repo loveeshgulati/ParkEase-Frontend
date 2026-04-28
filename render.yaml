@@ -1,6 +1,7 @@
 services:
   - type: web
     name: parkease-frontend
+    plan: free
     runtime: docker
     dockerContext: .
     dockerfilePath: Dockerfile
