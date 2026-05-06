@@ -7,4 +7,5 @@ export const environment = {
   bookingUrl:     'https://parkease-booking.onrender.com/api/v1',
   paymentUrl:     'https://parkease-payment.onrender.com/api/v1',
   notificationUrl:'https://parkease-notification.onrender.com/api/v1',
+  googleClientId: '249259003012-ue9vlin6kj50inleeu8bl2ne839nob6u.apps.googleusercontent.com',
 };

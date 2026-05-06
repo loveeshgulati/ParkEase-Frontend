@@ -7,4 +7,5 @@ export const environment = {
   bookingUrl:     'http://localhost:5001/api/v1',
   paymentUrl:     'http://localhost:5006/api/v1',
   notificationUrl:'http://localhost:5008/api/v1',
+  googleClientId: '249259003012-ue9vlin6kj50inleeu8bl2ne839nob6u.apps.googleusercontent.com',
 };

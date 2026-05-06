@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -25,9 +25,9 @@ import { AuthService } from '../../../core/services/auth.service';
         </div>
         <h2>ParkEase</h2>
         <span class="auth-subtitle">Sign in to continue to your dashboard</span>
-        
+
         <div class="alert alert-error" *ngIf="error">{{ error }}</div>
-        
+
         <form (ngSubmit)="login()">
           <div class="form-group">
             <label>Email Address</label>
@@ -45,25 +45,78 @@ import { AuthService } from '../../../core/services/auth.service';
               </button>
             </div>
           </div>
-          
+
           <button type="submit" class="btn btn-primary btn-block mt-3" [disabled]="loading">
             <span *ngIf="!loading">Sign In</span>
             <span *ngIf="loading">Signing in...</span>
           </button>
         </form>
-        
+
+        <!-- Divider -->
+        <div class="auth-divider">
+          <span>or</span>
+        </div>
+
+        <!-- Google Sign-In Button -->
+        <div id="google-signin-btn" class="google-btn-container"></div>
+
         <p>
           Don't have an account? <a routerLink="/register">Create one now</a>
         </p>
       </div>
     </div>
-  `
+  `,
+  styles: [`
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 1.25rem 0;
+      color: var(--text-muted, #8899aa);
+      font-size: 0.85rem;
+    }
+    .auth-divider::before,
+    .auth-divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid var(--border-color, rgba(255,255,255,0.1));
+    }
+    .auth-divider span {
+      padding: 0 0.75rem;
+    }
+    .google-btn-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    /* Force GIS button to fill the container width */
+    .google-btn-container > div,
+    .google-btn-container iframe {
+      width: 100% !important;
+    }
+  `]
 })
-export class LoginComponent {
+export class LoginComponent implements AfterViewInit {
   email = ''; password = ''; loading = false; error = '';
   showPassword = false;
 
   constructor(private auth: AuthService) {}
+
+  ngAfterViewInit(): void {
+    this.auth.renderGoogleButton(
+      'google-signin-btn',
+      'DRIVER',
+      (user) => {
+        this.loading = false;
+        this.auth.redirectByRole();
+      },
+      (msg) => {
+        this.loading = false;
+        this.error = msg;
+      }
+    );
+  }
 
   login() {
     this.loading = true; this.error = '';

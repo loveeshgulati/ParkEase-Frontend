@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -28,7 +28,7 @@ import { AuthService } from '../../../core/services/auth.service';
 
         <div class="alert alert-error" *ngIf="error">{{ error }}</div>
         <div class="alert alert-success" *ngIf="success">{{ success }}</div>
-        
+
         <form (ngSubmit)="register()">
           <div class="form-group">
             <label>Full Name</label>
@@ -54,7 +54,7 @@ import { AuthService } from '../../../core/services/auth.service';
           </div>
           <div class="form-group">
             <label>Register as</label>
-            <select [(ngModel)]="form.role" name="role" class="form-control">
+            <select [(ngModel)]="form.role" name="role" class="form-control" (ngModelChange)="onRoleChange()">
               <option value="DRIVER">Driver</option>
               <option value="MANAGER">Lot Manager</option>
             </select>
@@ -64,20 +64,84 @@ import { AuthService } from '../../../core/services/auth.service';
             <span *ngIf="loading">Creating account...</span>
           </button>
         </form>
-        
+
+        <!-- Divider -->
+        <div class="auth-divider">
+          <span>or continue with Google</span>
+        </div>
+
+        <!-- Google Sign-In Button (role is passed on first-time sign-up) -->
+        <div id="google-register-btn" class="google-btn-container"></div>
+
+        <p class="google-role-hint" *ngIf="form.role === 'MANAGER'">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          Google sign-up will register you as a <strong>Lot Manager</strong> (pending admin approval).
+        </p>
+
         <p>
           Already have an account? <a routerLink="/login">Log in here</a>
         </p>
       </div>
     </div>
-  `
+  `,
+  styles: [`
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 1.25rem 0;
+      color: var(--text-muted, #8899aa);
+      font-size: 0.85rem;
+    }
+    .auth-divider::before,
+    .auth-divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid var(--border-color, rgba(255,255,255,0.1));
+    }
+    .auth-divider span {
+      padding: 0 0.75rem;
+    }
+    .google-btn-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 0.75rem;
+    }
+    .google-btn-container > div,
+    .google-btn-container iframe {
+      width: 100% !important;
+    }
+    .google-role-hint {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.4rem;
+      font-size: 0.78rem;
+      color: var(--text-muted, #8899aa);
+      margin-bottom: 0.75rem;
+      line-height: 1.4;
+    }
+    .google-role-hint svg {
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+  `]
 })
-export class RegisterComponent {
+export class RegisterComponent implements AfterViewInit {
   form = { fullName: '', email: '', phone: '', password: '', role: 'DRIVER' };
   loading = false; error = ''; success = '';
   showPassword = false;
 
   constructor(private auth: AuthService, private router: Router) {}
+
+  ngAfterViewInit(): void {
+    this.renderGoogleButton();
+  }
+
+  /** Re-render the Google button when the role dropdown changes */
+  onRoleChange(): void {
+    this.renderGoogleButton();
+  }
 
   register() {
     this.loading = true; this.error = ''; this.success = '';
@@ -91,5 +155,25 @@ export class RegisterComponent {
       },
       error: err => { this.loading = false; this.error = err.error?.message || 'Registration failed'; }
     });
+  }
+
+  private renderGoogleButton(): void {
+    this.auth.renderGoogleButton(
+      'google-register-btn',
+      this.form.role,
+      (user) => {
+        this.loading = false;
+        this.auth.redirectByRole();
+      },
+      (msg) => {
+        this.loading = false;
+        if (msg.toLowerCase().includes('awaiting admin approval')) {
+          this.success = msg;
+          setTimeout(() => this.router.navigate(['/login']), 3000);
+        } else {
+          this.error = msg;
+        }
+      }
+    );
   }
 }
