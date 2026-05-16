@@ -42,8 +42,17 @@ jobs:
             echo "No test target found in angular.json. Skipping tests and coverage generation."
           fi
 
+      - name: Sanitize Secrets
+        run: |
+          echo "CLEAN_TOKEN=$(echo '${{ secrets.SONAR_TOKEN_FRONTEND }}' | tr -d '\n\r ')" >> $GITHUB_ENV
+          echo "CLEAN_ORG=$(echo '${{ secrets.SONAR_ORGANIZATION }}' | tr -d '\n\r ')" >> $GITHUB_ENV
+
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@master
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FRONTEND }}
+          SONAR_TOKEN: ${{ env.CLEAN_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL || 'https://sonarcloud.io' }}
+        with:
+          args: >
+            -Dsonar.organization=${{ env.CLEAN_ORG }}
+            -Dsonar.projectKey=parkease-frontend
