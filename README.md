@@ -1,6 +1,6 @@
-# ParkEase Frontend — Angular 17
+# ParkEase Frontend — Angular 
 
-Simple Angular 17 frontend for the ParkEase microservices backend.
+Angular frontend for the ParkEase microservices backend.
 
 ---
 
@@ -119,16 +119,3 @@ Password: Admin@123
 
 ---
 
-## CORS Fix for Backend
-
-If you see CORS errors, make sure each backend service has CORS enabled.
-All services already have `AllowAll` CORS policy in `Program.cs`.
-
----
-
-## Build for Production
-
-```bash
-ng build --configuration production
-# Output in dist/parkease-frontend/
-```
