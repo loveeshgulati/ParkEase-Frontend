@@ -1,6 +1,6 @@
 # ParkEase Frontend — Angular 
 
-Simple Angular 17 frontend for the ParkEase microservices backend.
+Angular frontend for the ParkEase microservices backend.
 
 ---
 
