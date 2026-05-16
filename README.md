@@ -49,6 +49,51 @@ src/
 
 ---
 
+## Architecture & UML Diagram
+
+```mermaid
+graph TD
+    App[App Component]
+    
+    subgraph Core
+        AuthGuard[Auth Guard]
+        RoleGuard[Role Guard]
+        AuthSvc[Auth Service]
+        ApiSvc[API Services]
+    end
+    
+    subgraph Features
+        subgraph Admin Module
+            AdminDash[Admin Dashboard]
+            ManageUsers[Manage Users]
+        end
+        
+        subgraph Manager Module
+            ManagerDash[Manager Dashboard]
+            ManageLots[Manage Lots]
+        end
+        
+        subgraph Driver Module
+            DriverDash[Driver Dashboard]
+            SearchLots[Search Parking]
+            Bookings[My Bookings]
+        end
+    end
+    
+    App --> AuthGuard
+    App --> RoleGuard
+    
+    RoleGuard -.->|Routes to| AdminDash
+    RoleGuard -.->|Routes to| ManagerDash
+    RoleGuard -.->|Routes to| DriverDash
+    
+    AdminDash --> AuthSvc
+    ManagerDash --> ApiSvc
+    DriverDash --> ApiSvc
+```
+
+---
+
 ## Setup & Run
 
 ```bash
@@ -66,13 +111,13 @@ ng serve
 ## Backend Service URLs (environment.ts)
 
 ```typescript
-authUrl:         'http://localhost:5001/api/v1'
-vehicleUrl:      'http://localhost:5002/api/v1'
+authUrl:         'http://localhost:7002/api/v1'
+vehicleUrl:      'http://localhost:7004/api/v1'
 parkingLotUrl:   'http://localhost:5003/api/v1'
-spotUrl:         'http://localhost:5004/api/v1'
-bookingUrl:      'http://localhost:5005/api/v1'
+spotUrl:         'http://localhost:5002/api/v1'
+bookingUrl:      'http://localhost:5001/api/v1'
 paymentUrl:      'http://localhost:5006/api/v1'
-notificationUrl: 'http://localhost:5007/api/v1'
+notificationUrl: 'http://localhost:5008/api/v1'
 ```
 
 Update these if your services run on different ports.
