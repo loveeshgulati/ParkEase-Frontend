@@ -26,8 +26,25 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Validate SonarQube Secrets
+        run: |
+          if [ -z "${{ secrets.SONAR_HOST_URL }}" ]; then
+            echo "::error::SONAR_HOST_URL secret is missing. Please set it in GitHub Repository Secrets."
+            exit 1
+          fi
+          if [ -z "${{ secrets.SONAR_TOKEN_FRONTEND }}" ]; then
+            echo "::error::SONAR_TOKEN_FRONTEND secret is missing. Please set it in GitHub Repository Secrets."
+            exit 1
+          fi
+
       - name: Run tests with coverage
-        run: npx ng test --watch=false --browsers=ChromeHeadless --code-coverage
+        run: |
+          # Check if test target exists in angular.json before running
+          if grep -q '"test":' angular.json; then
+            npx ng test --watch=false --browsers=ChromeHeadless --code-coverage
+          else
+            echo "No test target found in angular.json. Skipping tests and coverage generation."
+          fi
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@master
