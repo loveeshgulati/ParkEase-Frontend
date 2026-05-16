@@ -163,17 +163,3 @@ Password: Admin@123
 | My Payments | /driver/payments |
 
 ---
-
-## CORS Fix for Backend
-
-If you see CORS errors, make sure each backend service has CORS enabled.
-All services already have `AllowAll` CORS policy in `Program.cs`.
-
----
-
-## Build for Production
-
-```bash
-ng build --configuration production
-# Output in dist/parkease-frontend/
-```
