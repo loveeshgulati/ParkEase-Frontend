@@ -9,9 +9,9 @@ declare var Razorpay: any;
   providedIn: 'root'
 })
 export class RazorpayService {
-  private paymentUrl = `${environment.paymentUrl}/payments`;
+  private readonly paymentUrl = `${environment.paymentUrl}/payments`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   createOrder(amount: number, receipt: string): Observable<any> {
     console.log('📋 Creating Razorpay order:', { amount, receipt, paymentUrl: this.paymentUrl });
@@ -30,7 +30,7 @@ export class RazorpayService {
     
     return new Promise((resolve, reject) => {
       // Check if Razorpay is loaded
-      if (typeof (window as any).Razorpay === 'undefined') {
+      if ((globalThis as any).Razorpay === undefined) {
         console.error('❌ Razorpay SDK not loaded');
         reject(new Error('Razorpay SDK not loaded. Please check your internet connection.'));
         return;
@@ -69,7 +69,7 @@ export class RazorpayService {
 
       console.log('🚀 Opening Razorpay modal...');
       try {
-        const razorpay = new (window as any).Razorpay(options);
+        const razorpay = new (globalThis as any).Razorpay(options);
         razorpay.open();
       } catch (error) {
         console.error('❌ Error opening Razorpay modal:', error);

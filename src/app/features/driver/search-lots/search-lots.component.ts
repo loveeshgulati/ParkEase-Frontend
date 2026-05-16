@@ -105,7 +105,7 @@ export class SearchLotsComponent {
   nearbyResults: NearbyLot[] = [];
   loading = false; error = ''; searched = false;
 
-  constructor(private lotService: ParkingLotService, private router: Router) {}
+  constructor(private readonly lotService: ParkingLotService, private router: Router) {}
 
   searchByCity() {
     if (!this.city.trim()) return;

@@ -100,7 +100,7 @@ export class MyPaymentsComponent implements OnInit {
   payBookingId = 0; payAmount = 0; payMode = 'CARD';
   showReceipt = false; receiptText = '';
 
-  constructor(private paymentService: PaymentService) {}
+  constructor(private readonly paymentService: PaymentService) {}
 
   ngOnInit() { this.load(); }
 

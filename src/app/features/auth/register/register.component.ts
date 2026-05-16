@@ -132,7 +132,7 @@ export class RegisterComponent implements AfterViewInit {
   loading = false; error = ''; success = '';
   showPassword = false;
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private readonly auth: AuthService, private router: Router) {}
 
   ngAfterViewInit(): void {
     this.renderGoogleButton();

@@ -98,7 +98,7 @@ export class MyLotsComponent implements OnInit {
   showForm = false; loading = false; msg = ''; error = '';
   form = { name: '', city: '', address: '', latitude: 0, longitude: 0, openTime: '08:00', closeTime: '22:00' };
 
-  constructor(private lotService: ParkingLotService) {}
+  constructor(private readonly lotService: ParkingLotService) {}
 
   ngOnInit() { this.load(); }
 

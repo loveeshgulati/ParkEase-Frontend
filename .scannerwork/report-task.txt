@@ -1,0 +1,6 @@
+projectKey=parkease-frontend
+serverUrl=http://localhost:9000
+serverVersion=26.5.0.122743
+dashboardUrl=http://localhost:9000/dashboard?id=parkease-frontend
+ceTaskId=e152db87-8fbc-4349-aeb1-b9233056dc18
+ceTaskUrl=http://localhost:9000/api/ce/task?id=e152db87-8fbc-4349-aeb1-b9233056dc18

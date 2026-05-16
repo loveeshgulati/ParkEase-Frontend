@@ -320,7 +320,7 @@ body {
 }
 
 .table th {
-  background: rgba(255, 255, 255, 0.05);
+  background: #1e293b;
   padding: 16px 20px;
   text-align: left;
   font-weight: 700;
@@ -851,7 +851,7 @@ body {
   white-space: nowrap;
 }
 .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 15px rgba(0, 140, 255, 0.3); }
-.tab-btn:hover:not(.active) { background: rgba(255, 255, 255, 0.1); border-color: var(--primary-hover); color: #ffffff; }
+.tab-btn:hover:not(.active) { background: #334155; border-color: var(--primary-hover); color: #ffffff; }
 
 .tab-toggle { display: flex; gap: 8px; }
 

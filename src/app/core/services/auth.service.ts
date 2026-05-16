@@ -10,10 +10,10 @@ declare const google: any;
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private currentUserSubject = new BehaviorSubject<LoginResponse | null>(this.getStoredUser());
+  private readonly currentUserSubject = new BehaviorSubject<LoginResponse | null>(this.getStoredUser());
   currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient, private router: Router, private ngZone: NgZone) {
+  constructor(private readonly http: HttpClient, private router: Router, private ngZone: NgZone) {
     this.initGoogleSignIn();
   }
 
@@ -96,7 +96,7 @@ export class AuthService {
   ): void {
     // Defer until the GSI library is available
     const tryRender = () => {
-      if (typeof google === 'undefined' || !google?.accounts?.id) {
+      if ((globalThis as any).google === undefined || !google?.accounts?.id) {
         setTimeout(tryRender, 200);
         return;
       }

@@ -86,7 +86,7 @@ export class ManageManagersComponent implements OnInit {
   selectedId = 0;
   msg = '';
 
-  constructor(private adminService: AdminService) {}
+  constructor(private readonly adminService: AdminService) {}
 
   ngOnInit() { this.load(); }
 

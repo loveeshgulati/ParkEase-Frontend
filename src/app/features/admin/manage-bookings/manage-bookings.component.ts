@@ -35,7 +35,7 @@ import { Booking } from '../../../core/models';
 })
 export class ManageBookingsComponent implements OnInit {
   bookings: Booking[] = [];
-  constructor(private bookingService: BookingService) {}
+  constructor(private readonly bookingService: BookingService) {}
   ngOnInit() { this.bookingService.getAllBookings().subscribe(r => { if (r.success) this.bookings = r.data; }); }
   getStatusClass(s: string) {
     return { 'badge-success': s === 'COMPLETED', 'badge-primary': s === 'ACTIVE', 'badge-warning': s === 'RESERVED', 'badge-danger': s === 'CANCELLED' || s === 'EXPIRED' };

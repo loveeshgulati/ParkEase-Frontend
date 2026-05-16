@@ -101,7 +101,7 @@ export class LoginComponent implements AfterViewInit {
   email = ''; password = ''; loading = false; error = '';
   showPassword = false;
 
-  constructor(private auth: AuthService) {}
+  constructor(private readonly auth: AuthService) {}
 
   ngAfterViewInit(): void {
     this.auth.renderGoogleButton(

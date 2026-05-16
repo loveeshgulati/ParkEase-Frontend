@@ -183,7 +183,7 @@ export class MyBookingsComponent implements OnInit {
           try {
             console.log('🔪 Opening Razorpay checkout...');
             // Check if Razorpay is available
-            if (typeof (window as any).Razorpay === 'undefined') {
+            if ((globalThis as any).Razorpay === undefined) {
               this.error = 'Razorpay not loaded. Please refresh the page.';
               console.error('❌ Razorpay not loaded');
               return;

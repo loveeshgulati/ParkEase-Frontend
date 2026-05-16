@@ -35,7 +35,7 @@ import { DriverDto } from '../../../core/models';
 })
 export class ManageDriversComponent implements OnInit {
   drivers: DriverDto[] = []; msg = '';
-  constructor(private adminService: AdminService) {}
+  constructor(private readonly adminService: AdminService) {}
   ngOnInit() { this.load(); }
   load() { this.adminService.getAllDrivers().subscribe(r => { if (r.success) this.drivers = r.data; }); }
   suspend(id: number) { const reason = prompt('Reason:') || 'Suspended'; this.adminService.suspendDriver(id, reason).subscribe(() => { this.msg = 'Driver suspended'; this.load(); }); }

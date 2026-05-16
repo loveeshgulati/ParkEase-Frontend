@@ -95,7 +95,7 @@ export class MyVehiclesComponent implements OnInit {
   showForm = false; loading = false; msg = ''; error = '';
   form = { licensePlate: '', make: '', model: '', color: '', vehicleType: '4W', isEV: false };
 
-  constructor(private vehicleService: VehicleService) {}
+  constructor(private readonly vehicleService: VehicleService) {}
 
   ngOnInit() { this.load(); }
 
@@ -128,6 +128,8 @@ export class MyVehiclesComponent implements OnInit {
   }
 
   getVehicleIcon(type: string): string {
-    return type === '2W' ? '🏍️' : type === 'HEAVY' ? '🚛' : '🚗';
+    if (type === '2W') return '🏍️';
+    if (type === 'HEAVY') return '🚛';
+    return '🚗';
   }
 }

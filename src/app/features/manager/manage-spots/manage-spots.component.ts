@@ -151,7 +151,7 @@ export class ManageSpotsComponent implements OnInit {
   singleForm = { lotId: 0, spotNumber: '', floor: 0, spotType: 'STANDARD', vehicleType: '4W', pricePerHour: 30, isHandicapped: false, isEVCharging: false };
   bulkForm = { lotId: 0, floor: 0, spotType: 'STANDARD', vehicleType: '4W', pricePerHour: 30, isHandicapped: false, isEVCharging: false, count: 10, prefix: 'A' };
 
-  constructor(private route: ActivatedRoute, private spotService: SpotService) {}
+  constructor(private readonly route: ActivatedRoute, private spotService: SpotService) {}
 
   ngOnInit() {
     this.lotId = +this.route.snapshot.params['id'];

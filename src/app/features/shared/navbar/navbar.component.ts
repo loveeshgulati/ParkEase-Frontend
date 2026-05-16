@@ -54,5 +54,5 @@ import { AuthService } from '../../../core/services/auth.service';
   `
 })
 export class NavbarComponent {
-  constructor(public auth: AuthService) {}
+  constructor(public readonly auth: AuthService) {}
 }

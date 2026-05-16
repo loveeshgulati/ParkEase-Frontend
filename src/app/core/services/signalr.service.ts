@@ -17,7 +17,7 @@ export class SignalrService {
   public notification$ = this.notificationSubject.asObservable();
   public connectionState$ = this.connectionStateSubject.asObservable();
 
-  constructor(private authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
   public startConnection(): void {
     if (this.hubConnection?.state === 'Connected') {

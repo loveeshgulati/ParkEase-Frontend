@@ -34,7 +34,7 @@ export class TestNotificationComponent {
   error = '';
   connectionStatus = '';
 
-  constructor(private notifService: NotificationService) {}
+  constructor(private readonly notifService: NotificationService) {}
 
   testNotification() {
     this.loading = true;
@@ -60,7 +60,7 @@ export class TestNotificationComponent {
 
   checkConnection() {
     // Check if SignalR is available
-    if (typeof (window as any).signalR !== 'undefined') {
+    if ((globalThis as any).signalR !== undefined) {
       this.connectionStatus = 'SignalR library is loaded';
     } else {
       this.connectionStatus = 'SignalR library is NOT loaded';

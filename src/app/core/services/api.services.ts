@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import {
   ApiResponse, Vehicle, RegisterVehicleRequest, ParkingLot, NearbyLot,
@@ -12,8 +11,8 @@ import {
 // ─── Vehicle Service ──────────────────────────────────────────────────────────
 @Injectable({ providedIn: 'root' })
 export class VehicleService {
-  private url = `${environment.vehicleUrl}/vehicles`;
-  constructor(private http: HttpClient) {}
+  private readonly url = `${environment.vehicleUrl}/vehicles`;
+  constructor(private readonly http: HttpClient) {}
 
   getMyVehicles() { return this.http.get<ApiResponse<Vehicle[]>>(`${this.url}/my-vehicles`); }
   registerVehicle(req: RegisterVehicleRequest) { return this.http.post<ApiResponse<Vehicle>>(this.url, req); }
@@ -25,8 +24,8 @@ export class VehicleService {
 // ─── ParkingLot Service ───────────────────────────────────────────────────────
 @Injectable({ providedIn: 'root' })
 export class ParkingLotService {
-  private url = `${environment.parkingLotUrl}/lots`;
-  constructor(private http: HttpClient) {}
+  private readonly url = `${environment.parkingLotUrl}/lots`;
+  constructor(private readonly http: HttpClient) {}
 
   searchByCity(city: string) { return this.http.get<ApiResponse<ParkingLot[]>>(`${this.url}/search`, { params: { city } }); }
   getNearby(lat: number, lng: number, radius = 5) { return this.http.get<ApiResponse<NearbyLot[]>>(`${this.url}/nearby`, { params: { lat, lng, radius } }); }
@@ -46,8 +45,8 @@ export class ParkingLotService {
 // ─── Spot Service ─────────────────────────────────────────────────────────────
 @Injectable({ providedIn: 'root' })
 export class SpotService {
-  private url = `${environment.spotUrl}/spots`;
-  constructor(private http: HttpClient) {}
+  private readonly url = `${environment.spotUrl}/spots`;
+  constructor(private readonly http: HttpClient) {}
 
   getSpotsByLot(lotId: number) { return this.http.get<ApiResponse<Spot[]>>(`${this.url}/lot/${lotId}`); }
   getAvailableSpots(lotId: number) { return this.http.get<ApiResponse<Spot[]>>(`${this.url}/lot/${lotId}/available`); }
@@ -61,8 +60,8 @@ export class SpotService {
 // ─── Booking Service ──────────────────────────────────────────────────────────
 @Injectable({ providedIn: 'root' })
 export class BookingService {
-  private url = `${environment.bookingUrl}/bookings`;
-  constructor(private http: HttpClient) {}
+  private readonly url = `${environment.bookingUrl}/bookings`;
+  constructor(private readonly http: HttpClient) {}
 
   createBooking(req: CreateBookingRequest) { return this.http.post<ApiResponse<Booking>>(this.url, req); }
   getMyBookings() { return this.http.get<ApiResponse<Booking[]>>(`${this.url}/my-bookings`); }
@@ -81,8 +80,8 @@ export class BookingService {
 // ─── Payment Service ──────────────────────────────────────────────────────────
 @Injectable({ providedIn: 'root' })
 export class PaymentService {
-  private url = `${environment.paymentUrl}/payments`;
-  constructor(private http: HttpClient) {}
+  private readonly url = `${environment.paymentUrl}/payments`;
+  constructor(private readonly http: HttpClient) {}
 
   processPayment(req: ProcessPaymentRequest) { return this.http.post<ApiResponse<Payment>>(`${this.url}/process`, req); }
   getMyPayments() { return this.http.get<ApiResponse<Payment[]>>(`${this.url}/my-payments`); }
@@ -98,8 +97,8 @@ export class PaymentService {
 // ─── Notification Service ─────────────────────────────────────────────────────
 @Injectable({ providedIn: 'root' })
 export class NotificationService {
-  private url = `${environment.notificationUrl}/notifications`;
-  constructor(private http: HttpClient) {}
+  private readonly url = `${environment.notificationUrl}/notifications`;
+  constructor(private readonly http: HttpClient) {}
 
   getMyNotifications() { return this.http.get<ApiResponse<Notification[]>>(`${this.url}`); }
   getUnreadCount() { return this.http.get<ApiResponse<number>>(`${this.url}/unread-count`); }
@@ -111,8 +110,8 @@ export class NotificationService {
 // ─── Admin Service ────────────────────────────────────────────────────────────
 @Injectable({ providedIn: 'root' })
 export class AdminService {
-  private url = `${environment.authUrl}/admin`;
-  constructor(private http: HttpClient) {
+  private readonly url = `${environment.authUrl}/admin`;
+  constructor(private readonly http: HttpClient) {
     console.log('AdminService: Initialized with URL:', this.url);
     console.log('AdminService: Environment authUrl:', environment.authUrl);
   }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { ParkingLotService, BookingService } from '../../../core/services/api.services';
+import { ParkingLotService } from '../../../core/services/api.services';
 import { AuthService } from '../../../core/services/auth.service';
 import { ParkingLot } from '../../../core/models';
 
@@ -68,7 +68,7 @@ export class ManagerDashboardComponent implements OnInit {
   myLots: ParkingLot[] = [];
   approvedLots = 0; pendingLots = 0; openLots = 0;
 
-  constructor(public auth: AuthService, private lotService: ParkingLotService) {}
+  constructor(public readonly auth: AuthService, private lotService: ParkingLotService) {}
 
   ngOnInit() {
     this.lotService.getMyLots().subscribe(r => {

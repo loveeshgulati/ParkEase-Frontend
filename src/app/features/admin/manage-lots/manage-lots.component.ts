@@ -79,7 +79,7 @@ export class ManageLotsComponent implements OnInit {
   selectedId = 0;
   msg = '';
 
-  constructor(private lotService: ParkingLotService) {}
+  constructor(private readonly lotService: ParkingLotService) {}
 
   ngOnInit() { this.load(); }
 

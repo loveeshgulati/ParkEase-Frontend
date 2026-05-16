@@ -49,6 +49,51 @@ src/
 
 ---
 
+## Architecture & UML Diagram
+
+```mermaid
+graph TD
+    App[App Component]
+    
+    subgraph Core
+        AuthGuard[Auth Guard]
+        RoleGuard[Role Guard]
+        AuthSvc[Auth Service]
+        ApiSvc[API Services]
+    end
+    
+    subgraph Features
+        subgraph Admin Module
+            AdminDash[Admin Dashboard]
+            ManageUsers[Manage Users]
+        end
+        
+        subgraph Manager Module
+            ManagerDash[Manager Dashboard]
+            ManageLots[Manage Lots]
+        end
+        
+        subgraph Driver Module
+            DriverDash[Driver Dashboard]
+            SearchLots[Search Parking]
+            Bookings[My Bookings]
+        end
+    end
+    
+    App --> AuthGuard
+    App --> RoleGuard
+    
+    RoleGuard -.->|Routes to| AdminDash
+    RoleGuard -.->|Routes to| ManagerDash
+    RoleGuard -.->|Routes to| DriverDash
+    
+    AdminDash --> AuthSvc
+    ManagerDash --> ApiSvc
+    DriverDash --> ApiSvc
+```
+
+---
+
 ## Setup & Run
 
 ```bash
