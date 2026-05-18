@@ -49,47 +49,170 @@ src/
 
 ---
 
-## Architecture & UML Diagram
+## Low-Level Design (LLD) Architectural Diagram
+
+### 1. Structural Class & Data Flow Interaction (UML Class Map)
+
+The following diagram maps the low-level interactions across components, guards, services, and models, illustrating the exact sequence of data flow during client-server operations.
 
 ```mermaid
-graph TD
-    App[App Component]
-    
-    subgraph Core
-        AuthGuard[Auth Guard]
-        RoleGuard[Role Guard]
-        AuthSvc[Auth Service]
-        ApiSvc[API Services]
-    end
-    
-    subgraph Features
-        subgraph Admin Module
-            AdminDash[Admin Dashboard]
-            ManageUsers[Manage Users]
-        end
-        
-        subgraph Manager Module
-            ManagerDash[Manager Dashboard]
-            ManageLots[Manage Lots]
-        end
-        
-        subgraph Driver Module
-            DriverDash[Driver Dashboard]
-            SearchLots[Search Parking]
-            Bookings[My Bookings]
-        end
-    end
-    
-    App --> AuthGuard
-    App --> RoleGuard
-    
-    RoleGuard -.->|Routes to| AdminDash
-    RoleGuard -.->|Routes to| ManagerDash
-    RoleGuard -.->|Routes to| DriverDash
-    
-    AdminDash --> AuthSvc
-    ManagerDash --> ApiSvc
-    DriverDash --> ApiSvc
+classDiagram
+    direction TB
+
+    %% Angular App Config & Root Router
+    class AppRoutes {
+        +routes: Routes
+        <<Configuration>>
+    }
+
+    class AppConfig {
+        +appConfig: ApplicationConfig
+        <<Configuration>>
+    }
+
+    %% Security & Guards
+    class AuthGuards {
+        +authGuard()
+        +adminGuard()
+        +managerGuard()
+        +driverGuard()
+        <<Guard>>
+    }
+
+    %% Interceptors
+    class AuthInterceptor {
+        +authInterceptor(req, next)
+        <<Interceptor>>
+    }
+
+    %% Feature Components
+    class LoginComponent {
+        +loginForm: FormGroup
+        +onSubmit()
+    }
+    class RegisterComponent {
+        +registerForm: FormGroup
+        +onSubmit()
+    }
+    class DriverDashboardComponent {
+        +vehicles: Vehicle[]
+        +activeBookings: Booking[]
+        +ngOnInit()
+    }
+    class ManagerDashboardComponent {
+        +lots: ParkingLot[]
+        +revenue: any
+        +ngOnInit()
+    }
+    class AdminDashboardComponent {
+        +managers: PendingManagerDto[]
+        +ngOnInit()
+    }
+
+    %% Services
+    class AuthService {
+        -currentUserSubject: BehaviorSubject
+        +currentUser: UserProfile
+        +login(credentials)
+        +register(userData)
+        +logout()
+    }
+
+    class VehicleService {
+        -url: string
+        +getMyVehicles()
+        +registerVehicle(req)
+        +deleteVehicle(id)
+    }
+
+    class ParkingLotService {
+        -url: string
+        +searchByCity(city)
+        +getNearby(lat, lng)
+        +getMyLots()
+        +approveLot(id)
+    }
+
+    class SpotService {
+        -url: string
+        +getSpotsByLot(lotId)
+        +getAvailableSpots(lotId)
+        +addSpot(req)
+    }
+
+    class BookingService {
+        -url: string
+        +createBooking(req)
+        +getMyBookings()
+        +checkIn(id)
+        +checkOut(id)
+    }
+
+    class RazorpayService {
+        -paymentUrl: string
+        +createOrder(amount, receipt)
+        +openRazorpayCheckout(order, bookingId)
+    }
+
+    class SignalrService {
+        -hubConnection: HubConnection
+        -notificationSubject: BehaviorSubject
+        +startConnection()
+        +stopConnection()
+    }
+
+    %% Flow Associations
+    AppConfig --> AppRoutes : Binds Route Configuration
+    AppRoutes --> AuthGuards : Protects Routes via Role Guards
+    AuthGuards --> AuthService : Queries Current Logged-in User Session
+
+    %% Component to Service Associations
+    LoginComponent --> AuthService : Authenticates via
+    RegisterComponent --> AuthService : Registers via
+    DriverDashboardComponent --> VehicleService : Fetches Vehicles
+    DriverDashboardComponent --> BookingService : Fetches Bookings
+    DriverDashboardComponent --> RazorpayService : Launches Payments
+    ManagerDashboardComponent --> ParkingLotService : Manages Lots
+    ManagerDashboardComponent --> SpotService : Configures Spots
+    AdminDashboardComponent --> AuthService : Supervise Managers
+
+    %% Service to Outgoing Interceptor Pipeline
+    VehicleService ..> AuthInterceptor : Injected Auth Token
+    ParkingLotService ..> AuthInterceptor : Injected Auth Token
+    SpotService ..> AuthInterceptor : Injected Auth Token
+    BookingService ..> AuthInterceptor : Injected Auth Token
+
+    %% SignalR Dynamic Notification updates
+    SignalrService --> DriverDashboardComponent : Pushes live popups
+    SignalrService --> ManagerDashboardComponent : Pushes occupancy updates
+```
+
+---
+
+### 2. Client-Server Outgoing Request Pipeline (Sequence Design)
+
+This low-level sequence diagram demonstrates how an outgoing HTTP call is built, dynamically decorated with security headers, and executed against your .NET Microservices API Gateway:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User as Client UI Component
+    participant Svc as Angular Service (e.g. BookingService)
+    participant Int as AuthInterceptor
+    participant Env as Environment Config
+    participant API as .NET Microservices Backend
+
+    User->>Svc: Invokes API call method (e.g., createBooking())
+    Svc->>Env: Pulls API endpoint URL base configuration
+    Env-->>Svc: Returns API base URL
+    Svc->>Int: Generates outgoing HttpClient request object
+    Note over Int: interceptor catches request before execution
+    Int->>Int: Retrieves JWT accessToken from local state storage
+    Int->>Int: Clones request, adding header: 'Authorization: Bearer <JWT>'
+    Int->>API: Forwards authorized, decorated request to port gateway
+    API-->>Int: Returns JSON response package
+    Int-->>Svc: Returns JSON observable payload stream
+    Svc-->>User: Component receives data & updates view dynamically
 ```
 
 ---
